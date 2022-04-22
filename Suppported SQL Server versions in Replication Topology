@@ -1,0 +1,37 @@
+Suppported SQL Server versions in Replication Topology
+
+https://repltalk.com/2016/08/12/suppported-sql-server-versions-in-replication-topology/
+
+Customer planning for migration to SQL Server 2016 asked for clarification on running mixed version of SQL Servers in their Replication Topology.  
+I searched for “mixed version”, but was unable to find our posted topic. My colleague George Mason tracked it down under “upgrade”.  
+I’m posting key paragraph along with quick reference examples.
+
+Upgrade Replicated Databases
+https://msdn.microsoft.com/en-us/library/ms143699.aspx
+
+SQL Server 2016 supports upgrading replicated databases from previous versions of SQL Server; 
+it is not required to stop activity at other nodes while a node is being upgraded. Ensure that you adhere to the rules regarding which versions are supported in a topology:
+
+A Distributor can be any version as long as it is greater than or equal to the Publisher version (in many cases the Distributor is the same instance as the Publisher).
+A Publisher can be any version as long as it less than or equal to the Distributor version.
+Subscriber version depends on the type of publication:
+A Subscriber to a transactional publication can be any version within two versions of the Publisher version. 
+For example: a SQL Server 2012 Publisher can have SQL Server 2014 and SQL Server 2016 Subscribers; 
+and a SQL Server 2016 Publisher can have SQL Server 2014 and SQL Server 2012 Subscribers.
+
+ 
+
+Key point Publisher is within 2 builds of the Subscriber and the Distributor is same or higher build then Publisher. 
+
+These are supported:
+
+Publisher (2008/R2)  -> Distributor (2016) -> Subscriber (2012)
+Publisher (2014)  -> Distributor (2016) -> Subscriber (2008/R2)
+Publisher (2016)  -> Distributor (2016) -> Subscriber (2012)
+Not supported:
+
+Publisher (2016)  -> Distributor (2016) -> Subscriber (2008/R2)
+Publisher (2008/R2)  -> Distributor (2016) -> Subscriber (2016)
+In chart above SQL Server 2008/R2 means either SQL Server 2008 or SQL Server 2008R2.  
+For all versions, ensure you’re running on most recent SQL Server service pack to take advantage of software fixes and enhancements.  
+Check out Microsoft Release Services blog for updates on service packs and cumulative updates.
